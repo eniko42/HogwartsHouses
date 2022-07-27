@@ -19,17 +19,15 @@ public class RoomService {
     }
 
     public List<Room> getAllRooms() {
-        //TODO
-        return null;
+        return roomDao.findAll();
     }
 
     public void addRoom(Room room) {
-        //TODO
+        roomDao.save(room);
     }
 
     public Room getRoomById(Long id) {
-        //TODO
-        return null;
+        return roomDao.findById(id).get();
     }
 
     public void updateRoomById(Long id, Room updatedRoom) {
