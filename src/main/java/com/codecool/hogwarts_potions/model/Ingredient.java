@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Getter
 @Setter
@@ -12,23 +11,16 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "STUDENT")
-public class Student {
+@Table(name = "INGREDIENT")
+public class Ingredient {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    private HouseType houseType;
-    private PetType petType;
 
     @ManyToOne
-    @JoinColumn(name = "room_id", nullable = false)
+    @JoinColumn(name = "recipe_id")
     @JsonIgnore
-    private Room room;
-
-    @OneToMany(mappedBy = "brewer")
-    @JsonIgnore
-    private List<Recipe> recipeList;
-
+    private Recipe recipe;
 }
