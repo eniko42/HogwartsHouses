@@ -19,8 +19,5 @@ public class Ingredient {
     private Long id;
     private String name;
 
-    @ManyToOne
-    @JoinColumn(name = "recipe_id")
-    @JsonIgnore
-    private Recipe recipe;
+
 }
