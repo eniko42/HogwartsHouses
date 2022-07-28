@@ -91,4 +91,8 @@ public class PotionService {
     private boolean notEnoughIngredients(List<Ingredient> ingredients) {
         return ingredients.size() < Recipe.MINIMAL_NUMBER_OF_INGREDIENTS;
     }
+
+    public List<Potion> getPotionsByStudent(Long student_id) {
+        return potionDao.findByBrewer_Id(student_id);
+    }
 }
