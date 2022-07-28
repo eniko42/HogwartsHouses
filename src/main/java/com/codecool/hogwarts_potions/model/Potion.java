@@ -21,7 +21,6 @@ public class Potion {
 
     @ManyToOne
     @JoinColumn(name = "brewer_id")
-    @JsonIgnore
     private Student brewer;
 
     @ManyToMany
@@ -31,4 +30,8 @@ public class Potion {
 
     @OneToOne
     private Recipe recipe;
+
+    public void addIngredient(Ingredient ingredient) {
+        ingredients.add(ingredient);
+    }
 }
