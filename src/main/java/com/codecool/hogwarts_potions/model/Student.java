@@ -28,7 +28,6 @@ public class Student {
     private Room room;
 
     @OneToMany(mappedBy = "brewer")
-    @JsonIgnore
     private List<Recipe> recipeList;
 
 }

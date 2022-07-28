@@ -23,28 +23,4 @@ public class Room {
     @OneToMany(mappedBy = "room", targetEntity = Student.class)
     private List<Student> residents = new ArrayList<>();
 
-    public Integer getCapacity() {
-        return capacity;
-    }
-
-    public void setCapacity(Integer capacity) {
-        this.capacity = capacity;
-    }
-
-    public List<Student> getResidents() {
-        return residents;
-    }
-
-    public void setResidents(List<Student> residents) {
-        this.residents = residents;
-    }
-
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getId() {
-        return id;
-    }
 }
