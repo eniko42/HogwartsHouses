@@ -37,10 +37,15 @@ public class PotionService {
 
     public Potion addPotion(Potion potion, Long student_id) {
         potion.setBrewer(studentDao.findById(student_id).get());
-        setIngredients(potion);
-        setStatus(potion);
-        setRecipe(potion);
+        potion.setStatus(BrewingStatus.BREW);
         return potionDao.save(potion);
+    }
+
+
+    private void checkIfNeedRecipe(Potion potion) {
+        if (potion.getStatus() != BrewingStatus.BREW) {
+            setRecipe(potion);
+        }
     }
 
     private void setIngredients(Potion potion) {
@@ -60,12 +65,12 @@ public class PotionService {
     private void setRecipe(Potion potion) {
         if (potion.getStatus() == BrewingStatus.REPLICA) {
             potion.setRecipe(getExistingRecipe(potion.getIngredients()).get());
-        }
-        else if (potion.getStatus() == BrewingStatus.DISCOVERY) {
+        } else if (potion.getStatus() == BrewingStatus.DISCOVERY) {
             Recipe recipe = new Recipe();
             recipe.setName(potion.getBrewer().getName() + "'s discovery");
             recipe.setBrewer(potion.getBrewer());
-            recipe.setIngredients(potion.getIngredients());
+            List<Ingredient> ingredients = new ArrayList<>(potion.getIngredients());
+            recipe.setIngredients(ingredients);
             potion.setRecipe(recipeDao.save(recipe));
         }
     }
@@ -74,11 +79,9 @@ public class PotionService {
         List<Ingredient> ingredients = potion.getIngredients();
         if (notEnoughIngredients(ingredients)) {
             potion.setStatus(BrewingStatus.BREW);
-        }
-        else if (getExistingRecipe(ingredients).isEmpty()) {
+        } else if (getExistingRecipe(ingredients).isEmpty()) {
             potion.setStatus(BrewingStatus.DISCOVERY);
-        }
-        else {
+        } else {
             potion.setStatus(BrewingStatus.REPLICA);
         }
     }
@@ -94,5 +97,13 @@ public class PotionService {
 
     public List<Potion> getPotionsByStudent(Long student_id) {
         return potionDao.findByBrewer_Id(student_id);
+    }
+
+    public Potion updatePotion(Ingredient ingredient, Long potion_id) {
+        Potion potion = potionDao.findById(potion_id).get();
+        potion.addIngredient(saveNewIngredients(ingredient));
+        setStatus(potion);
+        checkIfNeedRecipe(potion);
+        return potionDao.save(potion);
     }
 }
