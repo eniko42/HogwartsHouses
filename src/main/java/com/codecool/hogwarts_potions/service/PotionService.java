@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class PotionService {
@@ -64,7 +65,7 @@ public class PotionService {
 
     private void setRecipe(Potion potion) {
         if (potion.getStatus() == BrewingStatus.REPLICA) {
-            potion.setRecipe(getExistingRecipe(potion.getIngredients()).get());
+            potion.setRecipe(getExistingRecipe(potion.getIngredients()).get(1));
         } else if (potion.getStatus() == BrewingStatus.DISCOVERY) {
             Recipe recipe = new Recipe();
             recipe.setName(potion.getBrewer().getName() + "'s discovery");
@@ -86,9 +87,9 @@ public class PotionService {
         }
     }
 
-    private Optional<Recipe> getExistingRecipe(List<Ingredient> ingredients) {
+    private List<Recipe> getExistingRecipe(List<Ingredient> ingredients) {
         List<Recipe> recipes = recipeDao.findAll();
-        return recipes.stream().filter(recipe -> recipe.getIngredients().containsAll(ingredients)).findFirst();
+        return recipes.stream().filter(recipe -> recipe.getIngredients().containsAll(ingredients)).collect(Collectors.toList());
     }
 
     private boolean notEnoughIngredients(List<Ingredient> ingredients) {
@@ -105,5 +106,10 @@ public class PotionService {
         setStatus(potion);
         checkIfNeedRecipe(potion);
         return potionDao.save(potion);
+    }
+
+    public List<Recipe> getRecipesByIngredients(Long potion_id) {
+        List<Ingredient> ingredients = potionDao.getById(potion_id).getIngredients();
+        return getExistingRecipe(ingredients);
     }
 }
