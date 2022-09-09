@@ -24,8 +24,8 @@ public class RoomController {
     }
 
     @PostMapping
-    public void addRoom(@RequestBody Room room){
-        roomService.addRoom(room);
+    public Room addRoom(@RequestBody Room room){
+        return roomService.addRoom(room);
     }
 
     @GetMapping("/{id}")
@@ -34,13 +34,14 @@ public class RoomController {
     }
 
     @PutMapping("/{id}")
-    public void updateRoomById(@PathVariable("id") Long id, @RequestBody Room updatedRoom){
-        roomService.updateRoomById(id, updatedRoom);
+    public Room updateRoomById(@PathVariable("id") Long id, @RequestBody Room updatedRoom){
+        return roomService.updateRoomById(id, updatedRoom);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteRoomById(@PathVariable("id") Long id){
+    public String deleteRoomById(@PathVariable("id") Long id){
         roomService.deleteRoomById(id);
+        return "Room is deleted";
     }
 
     //Get rooms where no cat or owl lives

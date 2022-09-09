@@ -1,6 +1,7 @@
 package com.codecool.hogwarts_potions.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 import javax.persistence.*;
@@ -19,7 +20,11 @@ public class Student {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+    @JsonProperty("house_type")
+    @Enumerated(EnumType.STRING)
     private HouseType houseType;
+    @JsonProperty("pet_type")
+    @Enumerated(EnumType.STRING)
     private PetType petType;
 
     @ManyToOne
@@ -28,6 +33,7 @@ public class Student {
     private Room room;
 
     @OneToMany(mappedBy = "brewer")
+    @JsonProperty("recipe_list")
     private List<Recipe> recipeList;
 
 }
