@@ -14,7 +14,6 @@ import java.util.List;
 @Entity
 @Table(name = "RECIPE")
 public class Recipe {
-    public static final int MINIMAL_NUMBER_OF_INGREDIENTS = 5;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

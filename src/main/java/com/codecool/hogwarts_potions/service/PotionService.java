@@ -1,5 +1,6 @@
 package com.codecool.hogwarts_potions.service;
 
+import com.codecool.hogwarts_potions.service.constants.BrewingServiceConstants;
 import com.codecool.hogwarts_potions.model.BrewingStatus;
 import com.codecool.hogwarts_potions.model.Ingredient;
 import com.codecool.hogwarts_potions.model.Potion;
@@ -49,13 +50,6 @@ public class PotionService {
         }
     }
 
-    private void setIngredients(Potion potion) {
-        List<Ingredient> ingredientsToSet = new ArrayList<>();
-        potion.getIngredients().forEach(ingredient -> ingredientsToSet.add(saveNewIngredients(ingredient)));
-        potion.setIngredients(ingredientsToSet);
-    }
-
-
     private Ingredient saveNewIngredients(Ingredient ingredient) {
         final Ingredient savedIngredient = ingredientDao.findByName(ingredient.getName());
         if (savedIngredient == null) {
@@ -93,7 +87,7 @@ public class PotionService {
     }
 
     private boolean notEnoughIngredients(List<Ingredient> ingredients) {
-        return ingredients.size() < Recipe.MINIMAL_NUMBER_OF_INGREDIENTS;
+        return ingredients.size() < BrewingServiceConstants.MAX_INGREDIENTS_FOR_POTIONS;
     }
 
     public List<Potion> getPotionsByStudent(Long student_id) {
