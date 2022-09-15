@@ -1,6 +1,5 @@
 package com.codecool.hogwarts_potions.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -13,6 +12,10 @@ import javax.persistence.*;
 @Entity
 @Table(name = "INGREDIENT")
 public class Ingredient {
+
+    public Ingredient(String name) {
+        this.name = name;
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
