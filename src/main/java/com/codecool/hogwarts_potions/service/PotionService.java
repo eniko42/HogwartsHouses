@@ -9,6 +9,7 @@ import com.codecool.hogwarts_potions.service.repositories.IngredientDao;
 import com.codecool.hogwarts_potions.service.repositories.PotionDao;
 import com.codecool.hogwarts_potions.service.repositories.RecipeDao;
 import com.codecool.hogwarts_potions.service.repositories.StudentDao;
+import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -37,8 +38,8 @@ public class PotionService {
         return potionDao.findAll();
     }
 
-    public Potion addPotion(Potion potion, Long student_id) {
-        potion.setBrewer(studentDao.findById(student_id).get());
+    public Potion addPotion(Potion potion, Long student_id) throws NotFoundException {
+        potion.setBrewer(studentDao.findById(student_id).orElseThrow(()-> new NotFoundException("Student not found!")));
         potion.setStatus(BrewingStatus.BREW);
         return potionDao.save(potion);
     }
@@ -90,12 +91,15 @@ public class PotionService {
         return ingredients.size() < BrewingServiceConstants.MAX_INGREDIENTS_FOR_POTIONS;
     }
 
-    public List<Potion> getPotionsByStudent(Long student_id) {
+    public List<Potion> getPotionsByStudent(Long student_id) throws NotFoundException {
+        if (studentDao.findById(student_id).isEmpty()) {
+            throw new NotFoundException("Student not found!");
+        }
         return potionDao.findByBrewer_Id(student_id);
     }
 
-    public Potion updatePotion(Ingredient ingredient, Long potion_id) {
-        Potion potion = potionDao.findById(potion_id).get();
+    public Potion updatePotion(Ingredient ingredient, Long potion_id) throws NotFoundException {
+        Potion potion = potionDao.findById(potion_id).orElseThrow(()-> new NotFoundException("Potion not found!"));
         potion.addIngredient(saveNewIngredients(ingredient));
         setStatus(potion);
         checkIfNeedRecipe(potion);
