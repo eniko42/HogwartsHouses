@@ -51,10 +51,10 @@ public class PotionService {
     }
 
     private Ingredient saveNewIngredients(Ingredient ingredient) {
-        final Ingredient savedIngredient = ingredientDao.findByName(ingredient.getName());
-        if (savedIngredient == null) {
+        final Optional<Ingredient> savedIngredient = ingredientDao.findByName(ingredient.getName());
+        if (savedIngredient.isEmpty()) {
             return ingredientDao.save(ingredient);
-        } else return savedIngredient;
+        } else return savedIngredient.get();
     }
 
     private void setRecipe(Potion potion) {
